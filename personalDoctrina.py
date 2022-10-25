@@ -13,7 +13,10 @@ SCALEDICT = {
         'Minor Harmonic': '1,2,b3,4,5,b6,7',
         'Major Pentatonic': '1,2,3,5,6',
         'Minor Pentatonic': '1,b3,4,5,b7',
-        'Blues Pentatonic': '1,b3,4,b5,5,b7'
+        'Blues Pentatonic': '1,b3,4,b5,5,b7',
+        'Wtf': '1,b2,b3,3,4,5,b6,6,7'
+        # 'Wtf': '1,b2,3,4,b5,5,7'
+        # '1', '#1', '2', '#2', '3', '4', '#4', '5', '#5', '6', '#6', '7'
     },
     'Mode': {
         'Ionian': '1,2,3,4,5,6,7',
@@ -112,12 +115,14 @@ class Fretboard:
             if item == '#' or item == 'b':
                 self.tuning[index + 1] = self.tuning[index + 1] + self.tuning[index]
                 self.tuning.pop(index)
+        print(self.tuning)
         # We add the empty note
         self.frets = frets + 1
         self.fretboard = None
 
     def construct(self):
-        fretboard = [[i for i in Doctrina.interval_to_notes(item, 'b2,2,b3,3,4,b5,5,b6,6,b7,7', self.notes)] for item
+
+        fretboard = [[i for i in Doctrina.interval_to_notes(item, '1,b2,2,b3,3,4,b5,5,b6,6,b7,7', self.notes)] for item
                      in self.tuning]
 
         for index, item in enumerate(fretboard):
@@ -125,7 +130,8 @@ class Fretboard:
             notes_to_add_modulo = int((self.frets - 11) % 11)
             fretboard[index] += (item * notes_to_add_multiplicator)
             if notes_to_add_modulo > 1:
-                fretboard[index] += item[:(notes_to_add_modulo - 1)]
+                fretboard[index] += item[:(notes_to_add_modulo - 2)]
+            item.pop(0)
 
         self.fretboard = fretboard
 
