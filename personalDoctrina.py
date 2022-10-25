@@ -13,10 +13,8 @@ SCALEDICT = {
         'Minor Harmonic': '1,2,b3,4,5,b6,7',
         'Major Pentatonic': '1,2,3,5,6',
         'Minor Pentatonic': '1,b3,4,5,b7',
-        'Blues Pentatonic': '1,b3,4,b5,5,b7',
-        'Wtf': '1,b2,b3,3,4,5,b6,6,7'
-        # 'Wtf': '1,b2,3,4,b5,5,7'
-        # '1', '#1', '2', '#2', '3', '4', '#4', '5', '#5', '6', '#6', '7'
+        'Blues Pentatonic': '1,b2,3,4,b5,5,b7,7',
+        'Fredrik': '1,b2,b3,3,4,5,b6,6,7'
     },
     'Mode': {
         'Ionian': '1,2,3,4,5,6,7',
@@ -115,7 +113,6 @@ class Fretboard:
             if item == '#' or item == 'b':
                 self.tuning[index + 1] = self.tuning[index + 1] + self.tuning[index]
                 self.tuning.pop(index)
-        print(self.tuning)
         # We add the empty note
         self.frets = frets + 1
         self.fretboard = None
