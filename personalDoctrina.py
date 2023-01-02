@@ -13,7 +13,9 @@ SCALEDICT = {
         'Minor Harmonic': '1,2,b3,4,5,b6,7',
         'Major Pentatonic': '1,2,3,5,6',
         'Minor Pentatonic': '1,b3,4,5,b7',
-        'Blues Pentatonic': '1,b3,4,b5,5,b7'
+        'Blues Pentatonic': '1,b3,4,b5,5,b7',
+        'Octatonic One': '1,2,b3,4,b5,b6,6,7',
+        'Octatonic Two': '1,b2,b3,3,b5,5,6,b7'
     },
     'Mode': {
         'Ionian': '1,2,3,4,5,6,7',
@@ -117,7 +119,7 @@ class Fretboard:
         self.fretboard = None
 
     def construct(self):
-        fretboard = [[i for i in Doctrina.interval_to_notes(item, 'b2,2,b3,3,4,b5,5,b6,6,b7,7', self.notes)] for item
+        fretboard = [[i for i in Doctrina.interval_to_notes(item, '1,b2,2,b3,3,4,b5,5,b6,6,b7,7', self.notes)] for item
                      in self.tuning]
 
         for index, item in enumerate(fretboard):
@@ -125,8 +127,10 @@ class Fretboard:
             notes_to_add_modulo = int((self.frets - 11) % 11)
             fretboard[index] += (item * notes_to_add_multiplicator)
             if notes_to_add_modulo > 1:
-                fretboard[index] += item[:(notes_to_add_modulo - 1)]
+                fretboard[index] += item[:(notes_to_add_modulo - 2)]
 
+        for i in fretboard:
+            del i[0]
         self.fretboard = fretboard
 
         return
@@ -138,7 +142,7 @@ class Fretboard:
                 if item == self.key:
                     string = Back.GREEN + Fore.BLACK + f'{item}' + Back.LIGHTWHITE_EX
                 else:
-                    string = Back.LIGHTBLUE_EX + Fore.BLACK + f'{item}' + Back.LIGHTWHITE_EX
+                    string = Back.CYAN + Fore.BLACK + f'{item}' + Back.LIGHTWHITE_EX
             else:
                 string = Back.LIGHTWHITE_EX + Fore.BLACK + f'{item}'
             if len(item) > 1:
@@ -153,12 +157,12 @@ class Fretboard:
                     if note == self.key:
                         string += '-(' + Back.GREEN + f'{note}' + Back.LIGHTWHITE_EX + ')|'
                         continue
-                    string += '--' + Back.LIGHTBLUE_EX + f'{note}' + Back.LIGHTWHITE_EX + '-|'
+                    string += '--' + Back.CYAN + f'{note}' + Back.LIGHTWHITE_EX + '-|'
                     continue
                 if note == self.key:
                     string += '-(' + Back.GREEN + f'{note}' + Back.LIGHTWHITE_EX + ')-|'
                     continue
-                string += '--' + Back.LIGHTBLUE_EX + f'{note}' + Back.LIGHTWHITE_EX + '--|'
+                string += '--' + Back.CYAN + f'{note}' + Back.LIGHTWHITE_EX + '--|'
 
             string += Back.RESET
             print(string)
@@ -167,7 +171,7 @@ class Fretboard:
         frets_count += [
             f'{Fore.LIGHTWHITE_EX + str(i) + Back.LIGHTBLACK_EX if i % 2 != 0 and i != 11 and i != 13 or i == 12 else "  "}    '
             for i in range(10, self.frets - 1)]
-        frets_count += f'{self.frets}  '
+        frets_count += f'{self.frets - 1}  '
         print(Back.LIGHTBLACK_EX + ''.join(frets_count) + Back.RESET + Fore.RESET)
 
 
@@ -190,7 +194,7 @@ def main():
     Brain.check_key()
     Brain.check_scale()
     Brain.scale = Doctrina.interval_to_notes(Brain.key, Brain.scale, Brain.notes)
-    
+
     print(f'Key: {Brain.key}')
     print(f'Scale notes: {Brain.scale}')
 
